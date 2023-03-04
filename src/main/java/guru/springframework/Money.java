@@ -1,12 +1,12 @@
 package guru.springframework;
 
-public class Money {
+public class Money implements Expression {
     protected int amount;
     protected String currency;
 
     public Money(int amount, String currency) {
-         this.amount = amount;
-         this.currency = currency;
+        this.amount = amount;
+        this.currency = currency;
     }
 
     protected String currency() {
@@ -39,4 +39,15 @@ public class Money {
                 ", currency='" + currency + '\'' +
                 '}';
     }
+
+    public Expression plus(Money addmend) {
+        return new Sum(this, addmend);
+    }
+
+    @Override
+    public Money reduce(String to) {
+        return this;
+    }
+
+
 }
