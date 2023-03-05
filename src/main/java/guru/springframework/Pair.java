@@ -5,7 +5,6 @@ import java.util.Objects;
 public class Pair {
 
     private final String from;
-
     private final String to;
 
     public Pair(String from, String to) {
@@ -18,7 +17,8 @@ public class Pair {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pair pair = (Pair) o;
-        return Objects.equals(from, pair.from) && Objects.equals(to, pair.to);
+        return Objects.equals(from, pair.from) &&
+                Objects.equals(to, pair.to);
     }
 
     @Override

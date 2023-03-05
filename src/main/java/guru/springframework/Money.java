@@ -1,8 +1,8 @@
 package guru.springframework;
 
 public class Money implements Expression {
-    protected int amount;
-    protected String currency;
+    protected final int amount;
+    protected final String currency;
 
     public Money(int amount, String currency) {
         this.amount = amount;
@@ -10,18 +10,14 @@ public class Money implements Expression {
     }
 
     protected String currency() {
-        return this.currency;
+        return currency;
     }
 
-    public Money times(int multiplier) {
-        return new Money(this.amount * multiplier, this.currency);
-    }
-
-    public static Money dollar(int amount) {
+    public static Money dollar(int amount){
         return new Money(amount, "USD");
     }
 
-    public static Money franc(int amount) {
+    public static Money franc(int amount){
         return new Money(amount, "CHF");
     }
 
@@ -29,7 +25,12 @@ public class Money implements Expression {
     public boolean equals(Object object) {
         Money money = (Money) object;
         return this.amount == money.amount
-                && this.currency == money.currency;
+                && this.currency.equals(money.currency);
+    }
+
+    @Override
+    public Money reduce(Bank bank, String to){
+        return new Money(amount / bank.rate(this.currency, to), to);
     }
 
     @Override
@@ -40,16 +41,13 @@ public class Money implements Expression {
                 '}';
     }
 
-    public Expression plus(Money addmend) {
-        return new Sum(this, addmend);
+    @Override
+    public Expression times(int multiplier) {
+        return new Money(amount * multiplier, this.currency);
     }
 
     @Override
-    public Money reduce(Bank bank, String to) {
-        //return this;
-        //int rate = currency.equals("CHF") && to.equals("USD") ? 2 : 1;
-        return new Money(amount / bank.rate(this.currency, to), to);
+    public Expression plus(Expression addend){
+        return new Sum(this, addend);
     }
-
-
 }
